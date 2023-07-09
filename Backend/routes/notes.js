@@ -37,6 +37,10 @@ router.post('/addnotes',fetchuser,[
 //Route3 : update an existing notes post "/api/notes/updatenote"
 router.put('/updatenote/:id',fetchuser,async(req,res)=>{
     const {title,description,tag}  =req.body
+    try {
+      
+    
+    //create new note object
     const newNote = {};
     if(title){newNote.title = title}
     if(description){newNote.description = description}
@@ -55,6 +59,34 @@ router.put('/updatenote/:id',fetchuser,async(req,res)=>{
     // if not is availabe and the user is correct 
     note = await Note.findByIdAndUpdate(req.params.id,{$set:newNote},{new:true})
     res.json({note})
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Some error occured") 
+  }
   })
+
+  //Route 4 : delete an existing notes delte "/api/notes/deletenote"
+router.delete('/deletenote/:id',fetchuser,async(req,res)=>{
+  try {
+    
+  
+  //find the note to be updated and delete it
+  let note =await Note.findById(req.params.id);
+  //chcek wheather note is available or not
+  if(!note){return res.status(401).send("Not found")}
+
+  //check if the user is one who is created this note can only delete it
+  if(note.user.toString() !== req.user.id){
+      return res.status(401).send("Not Allowed")
+  }
+
+  // if note is availabe and the user is correct 
+  note = await Note.findByIdAndDelete(req.params.id)
+  res.json({"Success":"Note has been deleted",note:note})
+} catch (error) {
+  console.error(error.message);
+  res.status(500).send("Some error occured") 
+}
+})
 
 module.exports = router
