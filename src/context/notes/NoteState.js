@@ -18,7 +18,7 @@ const NoteState = (props) => {
       },
     });
     const json =await response.json()
-    console.log(json)
+    // console.log(json)
     setNotes(json)
   }
           
@@ -35,17 +35,7 @@ const NoteState = (props) => {
         body: JSON.stringify({ title, description, tag }),
       });
 
-      // const json = response.json()
-      //logic
-      const note = {
-        _id: "64a995950ebed6610c94c50",
-        user: "64a978d1d281120009d3842",
-        title: title,
-        description: description,
-        tag: tag,
-        date: "2023-07-08T16:57:57.901Z",
-        __v: 0,
-      };
+      const note =await response.json()
       setNotes(notes.concat(note));
     };
 
@@ -80,7 +70,7 @@ const NoteState = (props) => {
         body: JSON.stringify({ title, description, tag }),
       });
       const json = response.json()
-      console.log(json)
+      // console.log(json)
       //making another notes
       let newNotes = JSON.parse(JSON.stringify(notes))
       //logic to edit in client
